@@ -1,8 +1,10 @@
+from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 
-from rest_framework import serializers, status
-from rest_framework.response import Response
+from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from users.models import User
 
@@ -45,3 +47,33 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+
+
+class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
+    DEFAULT_LIFETIME = timedelta(hours=24)
+    EXTENDED_LIFETIME = timedelta(weeks=26)
+
+    def validate(self, attrs):
+        remember_me = attrs.pop("remember_me", False)
+        data = super().validate(attrs)
+
+        refresh = self.get_token(self.user)
+        access = refresh.access_token
+
+        if remember_me:
+            refresh.set_exp(
+                lifetime=UserTokenObtainPairSerializer.EXTENDED_LIFETIME
+                + timedelta(days=1)
+            )
+            access.set_exp(lifetime=UserTokenObtainPairSerializer.EXTENDED_LIFETIME)
+        else:
+            refresh.set_exp(
+                lifetime=UserTokenObtainPairSerializer.DEFAULT_LIFETIME
+                + timedelta(days=1)
+            )
+            access.set_exp(lifetime=UserTokenObtainPairSerializer.DEFAULT_LIFETIME)
+
+        data["refresh"] = str(refresh)
+        data["access"] = str(access)
+
+        return data
