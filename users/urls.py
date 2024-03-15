@@ -21,15 +21,21 @@ from django.urls import path
 from django.conf.urls.static import static
 
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from users.views import UserCreateUpdateRetrieveViewSet
 
 
 router = DefaultRouter()
-router.register(r"users", UserCreateUpdateRetrieveViewSet, basename="users")
+router.register(r"users", UserCreateUpdateRetrieveViewSet, basename="api/users")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
 
 urlpatterns += router.urls

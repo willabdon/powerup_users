@@ -76,9 +76,6 @@ def test_password_is_not_saved_as_plain_text(api_client, user_create_request_dat
     assert user.password != user_create_request_data["password"]
 
 
-# TODO
-
-
 @pytest.mark.django_db
 def test_request_fail_if_password_dont_match(api_client, user_create_request_data):
     user_create_request_data["confirm_password"] = "dummyvalue"
