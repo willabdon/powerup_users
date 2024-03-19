@@ -9,7 +9,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from users.models import User
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserCreateRetrieveSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(max_length=128, write_only=True)
 
     class Meta:

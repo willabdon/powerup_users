@@ -3,7 +3,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from users.models import User
-from users.serializers import UserCreateSerializer, UserUpdateSerializer
+from users.serializers import UserCreateRetrieveSerializer, UserUpdateSerializer
 from users.permissions import BelongsToUser
 
 
@@ -17,7 +17,7 @@ class UserCreateUpdateRetrieveViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "update" or self.action == "partial_update":
             return UserUpdateSerializer
-        return UserCreateSerializer
+        return UserCreateRetrieveSerializer
 
     def get_permissions(self):
         if self.request.method == "POST":

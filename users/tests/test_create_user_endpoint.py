@@ -4,7 +4,7 @@ import pytest
 from django.utils import timezone
 
 from users.models import User
-from users.serializers import UserCreateSerializer
+from users.serializers import UserCreateRetrieveSerializer
 
 
 URL = "/users/"
@@ -64,7 +64,7 @@ def test_response_matches_with_serializer(api_client, user_create_request_data):
     )
     data = response.json()
     user = User.objects.get(email=user_create_request_data["email"])
-    assert data == UserCreateSerializer(user).data
+    assert data == UserCreateRetrieveSerializer(user).data
 
 
 @pytest.mark.django_db
