@@ -10,6 +10,7 @@ class User(AbstractUser):
 
     external_id = models.CharField(max_length=36, null=False, blank=False, unique=True)
     created_date = models.DateField(default=timezone.now)
+    updated_at = models.DateField(default=timezone.now)
     email = models.EmailField(_("email address"), blank=True, unique=True)
     username = None
 
@@ -27,4 +28,5 @@ class User(AbstractUser):
 
     def save(self, **kargs) -> None:
         self._generate_external_id()
+        self.updated_at = timezone.now()
         return super().save(**kargs)

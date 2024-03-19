@@ -49,6 +49,18 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            "first_name",
+            "last_name",
+            "id",
+            "external_id",
+        )
+        model = User
+        read_only_fields = ("id", "external_id")
+
+
 class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
     DEFAULT_LIFETIME = timedelta(hours=24)
     EXTENDED_LIFETIME = timedelta(weeks=26)
